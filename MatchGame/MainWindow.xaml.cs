@@ -29,15 +29,21 @@ namespace MatchGame
         {
             InitializeComponent();
 
-            timer.Interval = TimeSpan.FromSeconds(.1);
+            timer.Interval = TimeSpan.FromSeconds(.59);
+
             timer.Tick += Timer_Tick;
             SetUpGame();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-            tenthsOfSecondsElapsed++;
-            timeTextBlock.Text = (tenthsOfSecondsElapsed / 10F).ToString("O.Os");
+            tenthsOfSecondsElapsed--;
+            timeTextBlock.Text = (tenthsOfSecondsElapsed).ToString("0.s");
+            if(tenthsOfSecondsElapsed < 0 && matchesFound < 8)
+            {
+                timer.Stop();
+                timeTextBlock.Text = "Lost it☹️, -Play again?";
+            }
             if (matchesFound == 8)
             {
                 timer.Stop();
@@ -73,7 +79,7 @@ namespace MatchGame
                 }
             }
             timer.Start();
-            tenthsOfSecondsElapsed = 0; 
+            tenthsOfSecondsElapsed = 31; 
             matchesFound = 0;
         }
 
@@ -103,7 +109,7 @@ namespace MatchGame
 
         private void TimeTextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(matchesFound == 8)
+            if(matchesFound == 8 || (tenthsOfSecondsElapsed < 0 && matchesFound < 8))
             {
                 SetUpGame();
             }
